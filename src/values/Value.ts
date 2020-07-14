@@ -1,4 +1,4 @@
-namespace pixiparticles.values {
+namespace phaserparticles.values {
     export class Value {
         public active: boolean;
         public alwaysActive: boolean;

@@ -1,6 +1,6 @@
 /// <reference path="./Value.ts" />
 
-namespace pixiparticles.values {
+namespace phaserparticles.values {
     export class RangedNumericValue extends Value {
         public lowMin: number;
         public lowMax: number;

@@ -1,7 +1,7 @@
 //@ts-ignore
 export class Burnout extends PIXI.particles.core.ParticleEffect {
-    constructor() {
-        super(require('../../assets/effects/burnout.json'));
+    constructor(game) {
+        super(game, require('../../assets/effects/burnout.json'));
     }
 
     public get duration(): number {

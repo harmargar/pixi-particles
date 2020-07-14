@@ -1,6 +1,6 @@
 /// <reference path="./ScaledNumericValue.ts" />
 
-namespace pixiparticles.values {
+namespace phaserparticles.values {
     export class IndependentScaledNumericValue extends ScaledNumericValue {
         public independent: boolean;
 

@@ -1,6 +1,6 @@
 /// <reference path="./Value.ts" />
 
-namespace pixiparticles.values {
+namespace phaserparticles.values {
     export class GradientColorValue extends Value {
         private static _temp: number[] = [0, 0, 0, 0];
 

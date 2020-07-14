@@ -1,4 +1,4 @@
-namespace pixiparticles.core {
+namespace phaserparticles.core {
     export class Particle {
         public life: number;
         public currentLife: number;
@@ -26,20 +26,22 @@ namespace pixiparticles.core {
 
         //
 
-        public position = new PIXI.Point(0, 0);
-        public positionOffset = new PIXI.Point(0, 0);
+        public position = new Phaser.Point(0, 0);
+        public positionOffset = new Phaser.Point(0, 0);
         public flip: { x: boolean; y: boolean };
-        public scale = new PIXI.Point(0, 0);
-        public texture: PIXI.Texture;
-        private _sprite: PIXI.Sprite;
+        public scale = new Phaser.Point(0, 0);
+        public texture: Phaser.RenderTexture;
+        private _sprite: Phaser.Sprite;
+        private _game: Phaser.Game;
 
-        public constructor(additive: boolean, texture?: PIXI.Texture) {
-            this._sprite = new PIXI.Sprite(texture);
+        public constructor(game: Phaser.Game, additive: boolean, texture?: Phaser.RenderTexture) {
+            this._game = game;
+            this._sprite = new Phaser.Sprite(this._game, 0, 0, texture);
             this._sprite.anchor.set(0.5);
-            this._sprite.blendMode = additive ? PIXI.BLEND_MODES.ADD : PIXI.BLEND_MODES.NORMAL;
+            this._sprite.blendMode = additive ? Phaser.blendModes.ADD : Phaser.blendModes.NORMAL;
         }
 
-        public get sprite(): PIXI.Sprite {
+        public get sprite(): Phaser.Sprite {
             return this._sprite;
         }
 
@@ -51,7 +53,7 @@ namespace pixiparticles.core {
 
         public update(): void {
             this._sprite.texture = this.texture;
-            this._sprite.tint = PIXI.utils.rgb2hex(this.color);
+            // this._sprite.tint = PIXI.utils.rgb2hex(this.color);
             this._sprite.alpha = this.color[3];
             this.scale.copyTo(this._sprite.scale);
             this._sprite.position.x = this.position.x + this.positionOffset.x;

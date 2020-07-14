@@ -1,12 +1,12 @@
-namespace pixiparticles.core {
-    export class ParticleEffect extends PIXI.Container {
+namespace phaserparticles.core {
+    export class ParticleEffect extends Phaser.Group {
         private readonly _emitters: ParticleEmitter[];
         private _ownsTexture: boolean;
 
-        public constructor(config: any) {
-            super();
+        public constructor(game: Phaser.Game, config?: any) {
+            super(game);
             this._emitters = [];
-            Object.keys(config).forEach(e => {
+            Object.keys(config).forEach((e) => {
                 const emitter = this.newEmitter(e, config[e]);
                 this._emitters.push(emitter);
             });
@@ -23,8 +23,8 @@ namespace pixiparticles.core {
             for (let i = 0, n = this._emitters.length; i < n; i++) this._emitters[i].reset();
         }
 
-        public update(delta: number): void {
-            for (let i = 0, n = this._emitters.length; i < n; i++) this._emitters[i].update(delta);
+        public update(): void {
+            for (let i = 0, n = this._emitters.length; i < n; i++) this._emitters[i].update(this.game.time.elapsedMS);
         }
 
         public allowCompletion(): void {
@@ -63,7 +63,7 @@ namespace pixiparticles.core {
 
         /** Allocates all emitters particles. See {@link com.badlogic.gdx.graphics.g2d.ParticleEmitter#preAllocateParticles()} */
         public preAllocateParticles(): void {
-            this._emitters.forEach(e => e.preAllocateParticles());
+            this._emitters.forEach((e) => e.preAllocateParticles());
         }
 
         /** Disposes the texture for each sprite for each ParticleEmitter. */
@@ -71,7 +71,7 @@ namespace pixiparticles.core {
             if (!this._ownsTexture) return;
             for (let i = 0, n = this._emitters.length; i < n; i++) {
                 const emitter = this._emitters[i];
-                emitter.sprites.forEach(s => s.destroy());
+                emitter.sprites.forEach((s) => s.destroy(false));
             }
             super.destroy();
         }

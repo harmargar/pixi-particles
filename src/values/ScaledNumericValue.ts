@@ -1,6 +1,6 @@
 /// <reference path="./RangedNumericValue.ts" />
 
-namespace pixiparticles.values {
+namespace phaserparticles.values {
     export class ScaledNumericValue extends RangedNumericValue {
         public scaling: number[] = [1];
         public timeline: number[] = [0];

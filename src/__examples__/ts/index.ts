@@ -1,56 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
-/// <reference types="../../../bin/pixi-particles.js" />
-import '../../../bin/pixi-particles';
-// import { Default } from './effects/default';
-// import { Burnout } from './effects/burnout';
-// import { Dust } from './effects/dust';
-// import { DustLeft } from './effects/dust-left';
-// import { DustRight } from './effects/dust-right';
-// import { ExplosionEnemy } from './effects/explosion-enemy';
-// import { ExplosionSmall } from './effects/explosion-small';
-// import { Explosion } from './effects/explosion';
-// import { FireballBlue } from './effects/fireball-blue';
-// import { Fireball } from './effects/fireball';
-// import { FireworksTracerWithDazzler } from './effects/fireworks-tracer-with-dazzler';
-// import { FireworksTracer } from './effects/fireworks-tracer';
-// import { Fireworks } from './effects/fireworks';
-// import { FlamePixel } from './effects/flame-pixel';
-// import { Flame } from './effects/flame';
-// import { Glass } from './effects/glass';
-// import { HallucinogenFull } from './effects/hallucinogen-full';
-// import { Hallucinogen } from './effects/hallucinogen';
-// import { Laser } from './effects/laser';
-// import { MuzzleFlashWithSmoke } from './effects/muzzle-flash-with-smoke';
-// import { MuzzleFlash } from './effects/muzzle-flash';
-// import { PentagramGlitchy } from './effects/pentagram-glitchy';
-// import { Pentagram } from './effects/pentagram';
-// import { RainCinematic } from './effects/rain-cinematic';
-// import { Rain } from './effects/rain';
-// import { SmokeTrail } from './effects/smoke-trail';
-// import { SmokeTrain } from './effects/smoke-train';
-// import { Smoke } from './effects/smoke';
-// import { SnowFlakes } from './effects/snow-flakes';
-// import { Sparks } from './effects/sparks';
-// import { SplashPixel } from './effects/splash-pixel';
-// import { Splash } from './effects/splash';
-// import { StarTrail } from './effects/star-trail';
-// import { Star } from './effects/star';
-// import { Starlight } from './effects/starlight';
-// import { Stink } from './effects/stink';
-// import { Thrust } from './effects/thrust';
-// import { ThrusterPixel } from './effects/thruster-pixel';
-// import { Thruster } from './effects/thruster';
-// import { TrailFart } from './effects/trail-fart';
-// import { TrailPixel } from './effects/trail-pixel';
-// import { Trail } from './effects/trail';
+/// <reference types="../../../bin/phaser-particles.js" />
+import '../../../bin/phaser-particles';
 import { Confetti } from './effects/confetti';
 
-class Game extends PIXI.Application {
+class Game extends Phaser.Game {
     static readonly EFFECT = Confetti;
-    private _effect: PIXI.particles.core.ParticleEffect;
+    private _effect: Phaser.particles.core.ParticleEffect;
     public constructor() {
-        super({ resizeTo: window, backgroundColor: 0x000000 });
-        document.getElementById('gameContainer')?.appendChild(this.view);
+        super();
+        // document.getElementById('gameContainer')?.appendChild(this.view);
         this.loader
             .add('default.png', require('../assets/particles/default.png'))
             .add('explosion-1.png', require('../assets/particles/explosion-1.png'))
@@ -93,7 +51,7 @@ class Game extends PIXI.Application {
             .load(() => {
                 const effect = new Game.EFFECT();
                 effect.start();
-                this.ticker.add(delta => {
+                this.ticker.add((delta) => {
                     effect.update(this.ticker.deltaMS);
                 });
                 // setInterval(() => {

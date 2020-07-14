@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const UglifyJS = require('uglify-js');
 
-const inputPath = 'bin/pixi-particles.js';
-const outputPath = 'bin/pixi-particles.min.js';
+const inputPath = 'bin/phaser-particles.js';
+const outputPath = 'bin/Phaser-particles.min.js';
 
 const inputContent = fs.readFileSync(inputPath, 'utf8');
 

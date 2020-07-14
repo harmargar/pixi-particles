@@ -1,4 +1,4 @@
-namespace pixiparticles.core {
+namespace phaserparticles.core {
     /** Objects implementing this interface will have {@link #reset()} called when passed to {@link Pool#free(Object)}. */
     interface Poolable {
         /** Resets the object for reuse. Object references should be nulled and fields may be set to default values. */
@@ -97,8 +97,8 @@ namespace pixiparticles.core {
 
     class PooledEffect extends ParticleEffect {
         private _pool: ParticleEffectPool;
-        public constructor(pool: ParticleEffectPool, effect?: ParticleEffect) {
-            super(effect);
+        public constructor(game: Phaser.Game, pool: ParticleEffectPool, effect?: ParticleEffect) {
+            super(game, effect);
             this._pool = pool;
         }
 
@@ -122,7 +122,7 @@ namespace pixiparticles.core {
         }
 
         protected newObject(): PooledEffect {
-            const pooledEffect = new PooledEffect(this, this._effect);
+            const pooledEffect = new PooledEffect(game, this, this._effect);
             pooledEffect.start();
             return pooledEffect;
         }

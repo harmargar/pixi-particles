@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es5",
         "module": "none",
-        "outFile": "bin/pixi-particles.js",
+        "outFile": "bin/phaser-particles.js",
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "sourceMap": true,

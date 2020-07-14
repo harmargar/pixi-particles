@@ -1,6 +1,6 @@
 /// <reference path="./Value.ts" />
 
-namespace pixiparticles.values {
+namespace phaserparticles.values {
     export class SpawnShapeValue extends Value {
         public shape: constants.SpawnShape = constants.SpawnShape.point;
         public edges: boolean;

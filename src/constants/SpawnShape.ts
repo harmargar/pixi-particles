@@ -1,4 +1,4 @@
-namespace pixiparticles.constants {
+namespace phaserparticles.constants {
     export enum SpawnShape {
         point,
         line,

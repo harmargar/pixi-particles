@@ -1,6 +1,6 @@
-/// <reference types="pixi.js" />
+/// <reference path="../typings/phaser.comments.d.ts" />
 
-namespace pixiparticles.core {
+namespace phaserparticles.core {
     enum UpdateFlags {
         scale = 1 << 0,
         angle = 1 << 1,
@@ -15,7 +15,7 @@ namespace pixiparticles.core {
     export class ParticleEmitter {
         public duration = 1;
         public durationTimer = 0;
-        public sprites: PIXI.Texture[];
+        public sprites: Phaser.RenderTexture[];
         public continuous = false;
         public name: string;
 
@@ -50,7 +50,8 @@ namespace pixiparticles.core {
         private _maxParticleCount = 4;
         private _x = 0;
         private _y = 0;
-        private _container: PIXI.Container;
+        private _group: Phaser.Group;
+        private _game: Phaser.Game;
         private _activeCount = 0;
         private _active: boolean[];
         private _firstUpdate = false;
@@ -77,9 +78,10 @@ namespace pixiparticles.core {
         private _aligned = false;
         private _additive = true;
 
-        public constructor(container: PIXI.Container, name: string, emitterConfig: any) {
+        public constructor(group: Phaser.Group, name: string, emitterConfig: any) {
+            this._game = group.game;
             this._initialize();
-            this._container = container;
+            this._group = group;
             this.name = name;
             const { options } = emitterConfig;
             this._attached = options['attached'];
@@ -110,14 +112,14 @@ namespace pixiparticles.core {
             this._tintValue.init(emitterConfig['tint']);
             this._transparencyValue.init(emitterConfig['transparency']);
             const { textures } = emitterConfig;
-            this.setTextures(textures.map(t => PIXI.Texture.from(t)));
+            // this.setTextures(textures.map((t) => Phaser.RenderTexture.from(t)));
         }
 
         public setMaxParticleCount(maxParticleCount: number): void {
             this._maxParticleCount = maxParticleCount;
             this._active = Array(...Array(maxParticleCount)).map(() => false);
             this._activeCount = 0;
-            this._particles = Array(...Array(maxParticleCount)).map(() => new Particle(this._additive));
+            this._particles = Array(...Array(maxParticleCount)).map(() => new Particle(this._game, this._additive));
         }
 
         public setMinParticleCount(minParticleCount: number): void {
@@ -214,7 +216,7 @@ namespace pixiparticles.core {
             this._activeCount = activeCount;
         }
 
-        public setTextures(sprites: PIXI.Texture[]): void {
+        public setTextures(sprites: Phaser.RenderTexture[]): void {
             this.sprites = sprites;
             if (sprites.length === 0) return;
             for (let i = 0, n = this._particles.length; i < n; i++) {
@@ -292,8 +294,8 @@ namespace pixiparticles.core {
             return Math.min(1, this.durationTimer / this.duration);
         }
 
-        protected newParticle(sprite: PIXI.Texture): Particle {
-            return new Particle(this._additive, sprite);
+        protected newParticle(sprite: Phaser.RenderTexture): Particle {
+            return new Particle(this._game, this._additive, sprite);
         }
 
         protected getXSizeValues(): values.RangedNumericValue[] {
@@ -376,7 +378,7 @@ namespace pixiparticles.core {
         }
 
         private _activateParticle(index: number): void {
-            let sprite: PIXI.Texture = null;
+            let sprite: Phaser.RenderTexture = null;
             switch (this._spriteMode) {
                 case constants.SpriteMode.single:
                 case constants.SpriteMode.animated:
@@ -419,8 +421,8 @@ namespace pixiparticles.core {
             if ((updateFlags & UpdateFlags.angle) === 0) {
                 angle = particle.angle + particle.angleDiff * this._angleValue.getScale(0);
                 particle.angle = angle;
-                particle.angleCos = Math.cos(PIXI.DEG_TO_RAD * angle);
-                particle.angleSin = Math.sin(PIXI.DEG_TO_RAD * angle);
+                particle.angleCos = Math.cos(Phaser.Math.degToRad(angle));
+                particle.angleSin = Math.sin(Phaser.Math.degToRad(angle));
             }
 
             const spriteWidth = sprite.width;
@@ -506,8 +508,8 @@ namespace pixiparticles.core {
                                 spawnAngle = utils.between(0, 360);
                                 break;
                         }
-                        const cosDeg = Math.cos(PIXI.DEG_TO_RAD * angle);
-                        const sinDeg = Math.sin(PIXI.DEG_TO_RAD * angle);
+                        const cosDeg = Math.cos(Phaser.Math.degToRad(angle));
+                        const sinDeg = Math.sin(Phaser.Math.degToRad(angle));
                         x += cosDeg * radiusX;
                         y += (sinDeg * radiusX) / scaleY;
                         if ((updateFlags & UpdateFlags.angle) === 0) {
@@ -548,11 +550,11 @@ namespace pixiparticles.core {
                 this._updateParticle(particle, offsetTime, offsetTime);
             }
 
-            this._container.addChild(particle.sprite);
+            this._group.addChild(particle.sprite);
         }
 
         private _deactivateParticle(particle: Particle): void {
-            this._container.removeChild(particle.sprite);
+            this._group.removeChild(particle.sprite);
         }
 
         private _updateParticle(particle: Particle, delta: number, deltaMillis: number): boolean {
@@ -581,8 +583,8 @@ namespace pixiparticles.core {
                     velocityY = 0;
                 if ((updateFlags & UpdateFlags.angle) !== 0) {
                     const angle = particle.angle + particle.angleDiff * this._angleValue.getScale(percent);
-                    velocityX = velocity * Math.cos(PIXI.DEG_TO_RAD * angle);
-                    velocityY = velocity * Math.sin(PIXI.DEG_TO_RAD * angle);
+                    velocityX = velocity * Math.cos(Phaser.Math.degToRad(angle));
+                    velocityY = velocity * Math.sin(Phaser.Math.degToRad(angle));
                     if ((updateFlags & UpdateFlags.rotation) !== 0) {
                         let rotation = particle.rotationDiff * this._rotationValue.getScale(percent);
                         if (this._aligned) rotation -= angle;
