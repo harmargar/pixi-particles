@@ -217,6 +217,7 @@ namespace phaserparticles.core {
         }
 
         public setTextures(sprites: Phaser.RenderTexture[]): void {
+            console.warn(sprites);
             this.sprites = sprites;
             if (sprites.length === 0) return;
             for (let i = 0, n = this._particles.length; i < n; i++) {
@@ -388,6 +389,7 @@ namespace phaserparticles.core {
                     sprite = utils.sample(this.sprites);
                     break;
             }
+            console.warn(sprite);
 
             let particle = this._particles[index];
             if (particle === null) {

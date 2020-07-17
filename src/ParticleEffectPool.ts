@@ -109,9 +109,11 @@ namespace phaserparticles.core {
 
     export class ParticleEffectPool extends Pool<PooledEffect> {
         private readonly _effect: ParticleEffect;
+        private _game: Phaser.Game;
 
-        public constructor(effect: ParticleEffect, initialCapacity: number, max: number) {
+        public constructor(game: Phaser.Game, effect: ParticleEffect, initialCapacity: number, max: number) {
             super(initialCapacity, max);
+            this._game = game;
             this._effect = effect;
         }
 
@@ -122,7 +124,7 @@ namespace phaserparticles.core {
         }
 
         protected newObject(): PooledEffect {
-            const pooledEffect = new PooledEffect(game, this, this._effect);
+            const pooledEffect = new PooledEffect(this._game, this, this._effect);
             pooledEffect.start();
             return pooledEffect;
         }
