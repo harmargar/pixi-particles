@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 /// <reference types="../../../bin/phaser-particles.js" />
 import '../../../bin/phaser-particles';
-import { Flame } from './effects/flame';
+import { Burnout } from './effects/burnout';
+import { Confetti } from './effects/confetti';
+import { Default } from './effects/default';
+
+const effects = Object.freeze([Burnout, Confetti, Default]);
 
 class PreloadState extends Phaser.State {
     public preload(): void {
@@ -52,10 +56,37 @@ class PreloadState extends Phaser.State {
 }
 
 class GameState extends Phaser.State {
-    static readonly EFFECT = Flame;
+    // static readonly EFFECT = Flame;
     private _effect: Phaser.particles.core.ParticleEffect;
+    private _effectResetTime: NodeJS.Timeout;
     public create(): void {
-        const effect = new Flame(this.game);
+        this._addEffect(effects[0]);
+        this._buildButtons();
+    }
+
+    private _buildButtons(): void {
+        effects.forEach((effect, index) => {
+            this._buildButton(effect, index);
+        });
+    }
+
+    private _buildButton(effect, index): void {
+        const bg = this.game.make.graphics(0, 0);
+        bg.beginFill(0x0000ff, 1);
+        bg.drawRoundedRect(30, 40 * (index + 1), 80, 30, 10);
+        bg.endFill();
+
+        bg.inputEnabled = true;
+        bg.events.onInputUp.add(() => {
+            this._removeEffect();
+            this._addEffect(effect);
+        });
+
+        this.game.world.addChild(bg);
+    }
+
+    private _addEffect(effe): void {
+        const effect = new effe(this.game);
         effect.start();
         // setInterval(() => {
         //     effect.update(10);
@@ -64,15 +95,21 @@ class GameState extends Phaser.State {
         effect.y = this.game.height / 2;
         this.game.world.addChild(effect);
         this._effect = effect;
-        setInterval(() => {
+        this._effectResetTime = setInterval(() => {
             this._effect.reset();
             this._effect.start();
             // @ts-ignore
         }, this._effect.duration);
     }
 
+    private _removeEffect(): void {
+        clearInterval(this._effectResetTime);
+        this._effect.destroy();
+        this._effect = null;
+    }
+
     public update() {
-        this._effect.update();
+        this._effect && this._effect.update();
     }
 }
 
