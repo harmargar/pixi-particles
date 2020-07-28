@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-ignore */
 /// <reference types="../../../bin/phaser-particles.js" />
 import '../../../bin/phaser-particles';
-import { Confetti } from './effects/confetti';
+import { Flame } from './effects/flame';
 
 class PreloadState extends Phaser.State {
     public preload(): void {
@@ -52,10 +52,10 @@ class PreloadState extends Phaser.State {
 }
 
 class GameState extends Phaser.State {
-    static readonly EFFECT = Confetti;
+    static readonly EFFECT = Flame;
     private _effect: Phaser.particles.core.ParticleEffect;
     public create(): void {
-        const effect = new Confetti(this.game);
+        const effect = new Flame(this.game);
         effect.start();
         // setInterval(() => {
         //     effect.update(10);
@@ -78,32 +78,10 @@ class GameState extends Phaser.State {
 
 class Game extends Phaser.Game {
     public constructor() {
-        super('100%', '100%', Phaser.CANVAS, 'gameContainer', null);
-        console.warn('asdasd');
-        this.state.add('PreloadState', PreloadState, true);
+        super(1200, 675, Phaser.CANVAS, 'gameContainer');
+        this.state.add('PreloadState', PreloadState, false);
         this.state.add('GameState', GameState, false);
         this.state.start('PreloadState');
-        // this.
-        // document.getElementById('gameContainer')?.appendChild(this.view);
-        //     .load(() => {
-        //         const effect = new Game.EFFECT();
-        //         effect.start();
-        //         this.ticker.add((delta) => {
-        //             effect.update(this.ticker.deltaMS);
-        //         });
-        //         // setInterval(() => {
-        //         //     effect.update(10);
-        //         // }, 10);
-        //         effect.x = this.renderer.width / 2;
-        //         effect.y = this.renderer.height / 2;
-        //         this.stage.addChild(effect);
-        //         this._effect = effect;
-        //         setInterval(() => {
-        //             this._effect.reset();
-        //             this._effect.start();
-        //             // @ts-ignore
-        //         }, this._effect.duration);
-        //     });
     }
 }
 

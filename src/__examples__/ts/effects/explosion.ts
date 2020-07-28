@@ -1,7 +1,8 @@
+/// <reference path="../../../../typings/phaser.comments.d.ts" />
 //@ts-ignore
-export class Explosion extends PIXI.particles.core.ParticleEffect {
-    constructor() {
-        super(require('../../assets/effects/explosion.json'));
+export class Explosion extends Phaser.particles.core.ParticleEffect {
+    constructor(game: Phaser.Game) {
+        super(game, require('../../assets/effects/explosion.json'));
     }
 
     public get duration(): number {

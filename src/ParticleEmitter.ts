@@ -15,7 +15,7 @@ namespace phaserparticles.core {
     export class ParticleEmitter {
         public duration = 1;
         public durationTimer = 0;
-        public sprites: Phaser.RenderTexture[];
+        public sprites: Phaser.Sprite[];
         public continuous = false;
         public name: string;
 
@@ -112,14 +112,16 @@ namespace phaserparticles.core {
             this._tintValue.init(emitterConfig['tint']);
             this._transparencyValue.init(emitterConfig['transparency']);
             const { textures } = emitterConfig;
-            // this.setTextures(textures.map((t) => Phaser.RenderTexture.from(t)));
+            this.setTextures(textures.map((t) => new Phaser.Sprite(this._game, 0, 0, t)));
         }
 
         public setMaxParticleCount(maxParticleCount: number): void {
             this._maxParticleCount = maxParticleCount;
             this._active = Array(...Array(maxParticleCount)).map(() => false);
             this._activeCount = 0;
-            this._particles = Array(...Array(maxParticleCount)).map(() => new Particle(this._game, this._additive));
+            this._particles = Array(...Array(maxParticleCount)).map(
+                () => new Particle(this._game, this._additive, new Phaser.Sprite(this._game, 0, 0, 'confetti1.png')),
+            );
         }
 
         public setMinParticleCount(minParticleCount: number): void {
@@ -216,8 +218,7 @@ namespace phaserparticles.core {
             this._activeCount = activeCount;
         }
 
-        public setTextures(sprites: Phaser.RenderTexture[]): void {
-            console.warn(sprites);
+        public setTextures(sprites: Phaser.Sprite[]): void {
             this.sprites = sprites;
             if (sprites.length === 0) return;
             for (let i = 0, n = this._particles.length; i < n; i++) {
@@ -295,7 +296,7 @@ namespace phaserparticles.core {
             return Math.min(1, this.durationTimer / this.duration);
         }
 
-        protected newParticle(sprite: Phaser.RenderTexture): Particle {
+        protected newParticle(sprite: Phaser.Sprite): Particle {
             return new Particle(this._game, this._additive, sprite);
         }
 
@@ -379,7 +380,7 @@ namespace phaserparticles.core {
         }
 
         private _activateParticle(index: number): void {
-            let sprite: Phaser.RenderTexture = null;
+            let sprite: Phaser.Sprite = null;
             switch (this._spriteMode) {
                 case constants.SpriteMode.single:
                 case constants.SpriteMode.animated:
@@ -389,7 +390,6 @@ namespace phaserparticles.core {
                     sprite = utils.sample(this.sprites);
                     break;
             }
-            console.warn(sprite);
 
             let particle = this._particles[index];
             if (particle === null) {
@@ -398,7 +398,7 @@ namespace phaserparticles.core {
                 particle.flip.y = this._flipY;
             } else {
                 particle.reset();
-                particle.texture = sprite;
+                particle.texture = sprite.texture;
             }
 
             const percent = this.durationTimer / this.duration;
@@ -639,7 +639,7 @@ namespace phaserparticles.core {
                     // particle.setSize(sprite.getWidth(), sprite.getHeight());
                     // particle.setOrigin(sprite.getOriginX(), sprite.getOriginY());
                     // particle.translate((prevSpriteWidth - sprite.getWidth()) / 2, (prevSpriteHeight - sprite.getHeight()) / 2);
-                    particle.texture = sprite;
+                    particle.texture = sprite.texture;
                 }
             }
             particle.update();

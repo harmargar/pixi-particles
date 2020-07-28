@@ -1,7 +1,8 @@
+/// <reference path="../../../../typings/phaser.comments.d.ts" />
 //@ts-ignore
-export class Pentagram extends PIXI.particles.core.ParticleEffect {
-    constructor() {
-        super(require('../../assets/effects/pentagram.json'));
+export class Pentagram extends Phaser.particles.core.ParticleEffect {
+    constructor(game: Phaser.Game) {
+        super(game, require('../../assets/effects/pentagram.json'));
     }
 
     public get duration(): number {
