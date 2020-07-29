@@ -32,10 +32,8 @@ namespace phaserparticles.core {
         public scale = new Phaser.Point(0, 0);
         public texture: PIXI.Texture;
         private _sprite: Phaser.Sprite;
-        private _game: Phaser.Game;
 
         public constructor(game: Phaser.Game, additive: boolean, sprite: Phaser.Sprite) {
-            this._game = game;
             this._sprite = sprite;
             this._sprite.anchor.set(0.5);
             this._sprite.blendMode = additive ? Phaser.blendModes.ADD : Phaser.blendModes.NORMAL;
@@ -58,8 +56,6 @@ namespace phaserparticles.core {
             this._sprite.tint = hex;
             this._sprite.alpha = this.color[3];
             this.scale.copyTo(this._sprite.scale);
-            this._sprite.alpha = 1;
-            this.scale.set(1);
             this._sprite.position.x = this.position.x + this.positionOffset.x;
             this._sprite.position.y = this.position.y + this.positionOffset.y;
             this._sprite.angle = this.rotation;

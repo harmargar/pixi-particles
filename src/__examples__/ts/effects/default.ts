@@ -6,6 +6,6 @@ export class Default extends Phaser.particles.core.ParticleEffect {
     }
 
     public get duration(): number {
-        return 9999999999;
+        return 4000;
     }
 }

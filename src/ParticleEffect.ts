@@ -1,7 +1,6 @@
 namespace phaserparticles.core {
     export class ParticleEffect extends Phaser.Group {
         private readonly _emitters: ParticleEmitter[];
-        private _ownsTexture: boolean;
 
         public constructor(game: Phaser.Game, config?: any) {
             super(game);
@@ -68,10 +67,9 @@ namespace phaserparticles.core {
 
         /** Disposes the texture for each sprite for each ParticleEmitter. */
         public destroy(): void {
-            if (!this._ownsTexture) return;
             for (let i = 0, n = this._emitters.length; i < n; i++) {
                 const emitter = this._emitters[i];
-                emitter.sprites.forEach((s) => s.destroy(false));
+                emitter.sprites.forEach((s) => s.destroy(true));
             }
             super.destroy();
         }
